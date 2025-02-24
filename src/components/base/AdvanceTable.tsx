@@ -22,7 +22,7 @@ const AdvanceTable = ({
   const { getRowModel, getFlatHeaders, getFooterGroups } = table;
 
   return (
-    <div className="scrollbar ms-n1 ps-1">
+    <div className="scrollbar ms-n1 ps-1" style={{display:'contents'}}>
       <Table {...tableProps}>
         <thead className={headerClassName}>
           <tr>

@@ -91,7 +91,7 @@ export const routes: RouteItems[] = [
     ]
   },
   {
-    label: 'Analogy',
+    label: 'CRM',
     icon: UilCube,
     pages: [
       {
@@ -114,14 +114,42 @@ export const routes: RouteItems[] = [
         ]
       },
       {
-        name: 'Departments',
+        name: 'Institutes',
+        active: true,
+        icon: 'shopping-cart',
+        pages: [
+          {
+            name: 'All Institutes',
+            active: true,
+            path: 'crm/institutes/all-institutes',
+            pathName: 'all-institutes'
+            // pages: [
+            //   {
+            //     name: 'add-product',
+            //     path: '/apps/e-commerce/admin/add-product',
+            //     pathName: 'e-commerce-add-product',
+            //     active: true
+            //   },
+
+            // ]
+          },
+          {
+            name: 'Add Institutes',
+            active: true,
+            path: 'crm/institutes/add-institutes',
+            pathName: 'add-institutes'
+          }
+        ]
+      },
+      {
+        name: 'Leads',
         active: true,
         icon: 'shopping-cart',
         pages: [
           {
             name: 'All Leads',
             active: true,
-            path: 'apps/crm/all-leads',
+            path: 'crm/leads/all-leads',
             pathName: 'all-leads'
             // pages: [
             //   {
@@ -134,10 +162,38 @@ export const routes: RouteItems[] = [
             // ]
           },
           {
-            name: 'Add Department',
+            name: 'Add Institutes',
             active: true,
-            path: 'analogy/departments/add-department',
-            pathName: 'add-department'
+            path: 'crm/institutes/add-institutes',
+            pathName: 'add-institutes'
+          }
+        ]
+      },
+      {
+        name: 'Opportunities',
+        active: true,
+        icon: 'shopping-cart',
+        pages: [
+          {
+            name: 'All opportunities',
+            active: true,
+            path: 'crm/opportunities/all-opportunities',
+            pathName: 'all-opportunities'
+            // pages: [
+            //   {
+            //     name: 'add-product',
+            //     path: '/apps/e-commerce/admin/add-product',
+            //     pathName: 'e-commerce-add-product',
+            //     active: true
+            //   },
+
+            // ]
+          },
+          {
+            name: 'Add opportunities',
+            active: true,
+            path: 'analogy/opportunities/add-opportunities',
+            pathName: 'add-opportunities'
           }
         ]
       },

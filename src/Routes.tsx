@@ -140,7 +140,7 @@ import Members from 'pages/Members';
 import DualNav from 'pages/pages/layouts/DualNav';
 import App from 'App';
 import Crm from 'pages/dashboard/Crm';
-import LeadDetails from 'pages/apps/crm/LeadDetails';
+import LeadDetails from 'pages/pages/crmLeads/leadDetails';
 import Analytics from 'pages/apps/crm/Analytics';
 import DealDetails from 'pages/apps/crm/DealDetails';
 import ReportDetails from 'pages/apps/crm/ReportDetails';
@@ -216,6 +216,9 @@ import TravelLandingLayout from 'layouts/TravelLandingLayout';
 // import AddDesignation from 'pages/pages/designation/AddDesignation';
 import AuthGuard from 'components/AuthGuard';
 import AllLeads from 'pages/pages/CRM/crm_leads/AllLeads';
+import AllInstitutes from 'pages/pages/institutes/AllInstitutes';
+import CRMLeads from 'pages/pages/crmLeads/CRMLeads';
+import CRMOpportunities from 'pages/pages/cmrOpportunity/CRMOpportunity';
 const routes: RouteObject[] = [
   {
     element: <App />,
@@ -472,299 +475,243 @@ const routes: RouteObject[] = [
               }
             ]
           },
-          // {
-          //   path: '/analogy',
-          //   children: [
-          //     {
-          //       path: 'departments',
-          //       children: [
-          //         {
-          //           path: 'all-department',
-          //           element: <AllDepartments />
-          //         },
-          //         {
-          //           path: 'add-department',
-          //           element: <AddDepartment />
-          //         },
-          //         {
-          //           path: 'all-designations',
-          //           element: <AllDesignations />
-          //         }
-          //       ]
-          //     },
+          {
+            path: '/crm',
+            children: [
+              {
+                path: 'institutes',
+                children: [
+                  {
+                    path: 'all-institutes',
+                    element: <AllInstitutes />
+                  },
+                  // {
+                  //   path: 'add-department',
+                  //   element: <AddLeads />
+                  // },
+                  
+                ]
+              },
+              {
+                path: 'leads',
+                children: [
+                  {
+                    path: 'all-leads',
+                    element: <CRMLeads />
+                  },
+                  {
+                    path: 'lead-details/:id',
+                    element: <LeadDetails />
+                  },
+                  // {
+                  //   path: 'add-department',
+                  //   element: <AddLeads />
+                  // },
+                  
+                ]
+              },
+              {
+                path: 'opportunities',
+                children: [
+                  {
+                    path: 'all-opportunities',
+                    element: <CRMOpportunities />
+                  },
+                  // {
+                  //   path: 'add-department',
+                  //   element: <AddLeads />
+                  // },
+                  
+                ]
+              },
 
-          //     {
-          //       path: 'user-details/:userId',
-          //       element: <UserDetails />
-          //     },
+              // {
+              //   path: 'user-details/:userId',
+              //   element: <UserDetails />
+              // },
 
-          //     {
-          //       path: 'designations',
-          //       children: [
-          //         {
-          //           path: 'all-designations',
-          //           element: <AllDesignations />
-          //         },
-          //         {
-          //           path: 'add-designations',
-          //           element: <AddDesignation />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'user-info',
-          //       children: [
-          //         {
-          //           path: 'user-info',
-          //           element: <UserInfo />
-          //         },
-          //         {
-          //           path: 'all-user-info',
-          //           element: <AllUserInfo />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'roles',
-          //       children: [
-          //         {
-          //           path: 'all-roles',
-          //           element: <AllRoles />
-          //         },
-          //         {
-          //           path: 'add-roles',
-          //           element: <AddRole />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'qualification',
-          //       children: [
-          //         {
-          //           path: 'all-qualification',
-          //           element: <AllQualifications />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'credentials',
-          //       children: [
-          //         {
-          //           path: 'all-credentials',
-          //           element: <AllCredentials />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'salary',
-          //       children: [
-          //         {
-          //           path: 'all-salary',
-          //           element: <AllSalaries />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'address',
-          //       children: [
-          //         {
-          //           path: 'all-address',
-          //           element: <AllAddresses />
-          //         }
-          //       ]
-          //     },
-          //     // {
-          //     //   path: 'address',
-          //     //   children: [
-
-          //     //     {
-          //     //       path: 'all-address',
-          //     //       element: <AllAddresses />
-          //     //     },
-
-          //     //   ]
-          //     // },
-          //     {
-          //       path: 'crm',
-          //       children: [
-          //         {
-          //           path: 'analytics',
-          //           element: <Analytics />
-          //         },
-          //         {
-          //           path: 'deals',
-          //           element: <Deals />
-          //         },
-          //         {
-          //           path: 'deal-details',
-          //           element: <DealDetails />
-          //         },
-          //         {
-          //           path: 'report-details',
-          //           element: <ReportDetails />
-          //         },
-          //         {
-          //           path: 'leads',
-          //           element: <Leads />
-          //         },
-          //         {
-          //           path: 'lead-details',
-          //           element: <LeadDetails />
-          //         },
-          //         {
-          //           path: 'reports',
-          //           element: <Reports />
-          //         },
-          //         {
-          //           path: 'add-contact',
-          //           element: <AddContact />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'project-management',
-          //       children: [
-          //         {
-          //           path: 'create-new',
-          //           element: <CreateNew />
-          //         },
-          //         {
-          //           path: 'project-list-view',
-          //           element: <ProjectListView />
-          //         },
-          //         {
-          //           path: 'project-card-view',
-          //           element: <ProjectCardView />
-          //         },
-          //         {
-          //           path: 'project-board-view',
-          //           element: <ProjectBoardView />
-          //         },
-          //         {
-          //           path: 'todo-list',
-          //           element: <ProjectTodoList />
-          //         },
-          //         {
-          //           path: 'project-details',
-          //           element: <ProjectDetails />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'events',
-          //       children: [
-          //         {
-          //           path: 'create-an-event',
-          //           element: <CreateAnEvent />
-          //         },
-          //         {
-          //           path: 'event-detail',
-          //           element: <EventDetail />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'kanban',
-          //       children: [
-          //         {
-          //           path: 'kanban',
-          //           element: <Kanban />
-          //         },
-          //         {
-          //           path: 'boards',
-          //           element: <Boards />
-          //         },
-          //         {
-          //           path: 'create-board',
-          //           element: <CreateBoard />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'chat',
-          //       element: <Chat />,
-          //       children: [
-          //         {
-          //           index: true,
-          //           element: <ChatHomepage />
-          //         },
-          //         {
-          //           path: ':userId/conversation',
-          //           element: <ChatConversation />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'social',
-          //       children: [
-          //         {
-          //           path: 'profile',
-          //           element: <SocialProfile />
-          //         },
-          //         {
-          //           path: 'settings',
-          //           element: <Settings />
-          //         },
-          //         {
-          //           path: 'feed',
-          //           element: <Feed />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'calendar',
-          //       element: <Calendar />
-          //     },
-          //     {
-          //       path: 'email',
-          //       children: [
-          //         {
-          //           path: 'inbox',
-          //           element: <Inbox />
-          //         },
-          //         {
-          //           path: 'email-detail',
-          //           element: <EmailDetail />
-          //         },
-          //         {
-          //           path: 'compose',
-          //           element: <Compose />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'travel-agency',
-          //       children: [
-          //         {
-          //           path: 'hotel/admin/add-property',
-          //           element: <AddProperty />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'travel-agency',
-          //       children: [
-          //         {
-          //           path: 'hotel/admin/add-room',
-          //           element: <AddRoom />
-          //         },
-          //         {
-          //           path: 'hotel/admin/search-room',
-          //           element: <SearchRoom />
-          //         }
-          //       ]
-          //     },
-          //     {
-          //       path: 'travel-agency',
-          //       children: [
-          //         {
-          //           path: 'hotel/admin/room-listing',
-          //           element: <RoomListing />
-          //         }
-          //       ]
-          //     }
-          //   ]
-          // },
+              
+              {
+                path: 'crm',
+                children: [
+                  {
+                    path: 'analytics',
+                    element: <Analytics />
+                  },
+                  {
+                    path: 'deals',
+                    element: <Deals />
+                  },
+                  {
+                    path: 'deal-details',
+                    element: <DealDetails />
+                  },
+                  {
+                    path: 'report-details',
+                    element: <ReportDetails />
+                  },
+                  {
+                    path: 'leads',
+                    element: <Leads />
+                  },
+                  {
+                    path: 'lead-details',
+                    element: <LeadDetails />
+                  },
+                  {
+                    path: 'reports',
+                    element: <Reports />
+                  },
+                  {
+                    path: 'add-contact',
+                    element: <AddContact />
+                  }
+                ]
+              },
+              {
+                path: 'project-management',
+                children: [
+                  {
+                    path: 'create-new',
+                    element: <CreateNew />
+                  },
+                  {
+                    path: 'project-list-view',
+                    element: <ProjectListView />
+                  },
+                  {
+                    path: 'project-card-view',
+                    element: <ProjectCardView />
+                  },
+                  {
+                    path: 'project-board-view',
+                    element: <ProjectBoardView />
+                  },
+                  {
+                    path: 'todo-list',
+                    element: <ProjectTodoList />
+                  },
+                  {
+                    path: 'project-details',
+                    element: <ProjectDetails />
+                  }
+                ]
+              },
+              {
+                path: 'events',
+                children: [
+                  {
+                    path: 'create-an-event',
+                    element: <CreateAnEvent />
+                  },
+                  {
+                    path: 'event-detail',
+                    element: <EventDetail />
+                  }
+                ]
+              },
+              {
+                path: 'kanban',
+                children: [
+                  {
+                    path: 'kanban',
+                    element: <Kanban />
+                  },
+                  {
+                    path: 'boards',
+                    element: <Boards />
+                  },
+                  {
+                    path: 'create-board',
+                    element: <CreateBoard />
+                  }
+                ]
+              },
+              {
+                path: 'chat',
+                element: <Chat />,
+                children: [
+                  {
+                    index: true,
+                    element: <ChatHomepage />
+                  },
+                  {
+                    path: ':userId/conversation',
+                    element: <ChatConversation />
+                  }
+                ]
+              },
+              {
+                path: 'social',
+                children: [
+                  {
+                    path: 'profile',
+                    element: <SocialProfile />
+                  },
+                  {
+                    path: 'settings',
+                    element: <Settings />
+                  },
+                  {
+                    path: 'feed',
+                    element: <Feed />
+                  }
+                ]
+              },
+              {
+                path: 'calendar',
+                element: <Calendar />
+              },
+              {
+                path: 'email',
+                children: [
+                  {
+                    path: 'inbox',
+                    element: <Inbox />
+                  },
+                  {
+                    path: 'email-detail',
+                    element: <EmailDetail />
+                  },
+                  {
+                    path: 'compose',
+                    element: <Compose />
+                  }
+                ]
+              },
+              {
+                path: 'travel-agency',
+                children: [
+                  {
+                    path: 'hotel/admin/add-property',
+                    element: <AddProperty />
+                  }
+                ]
+              },
+              {
+                path: 'travel-agency',
+                children: [
+                  {
+                    path: 'hotel/admin/add-room',
+                    element: <AddRoom />
+                  },
+                  {
+                    path: 'hotel/admin/search-room',
+                    element: <SearchRoom />
+                  }
+                ]
+              },
+              {
+                path: 'travel-agency',
+                children: [
+                  {
+                    path: 'hotel/admin/room-listing',
+                    element: <RoomListing />
+                  }
+                ]
+              }
+            ]
+          },
           {
             path: '/pages',
             children: [
