@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Col, Dropdown, Row } from 'react-bootstrap';
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from 'react';
+import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faBars, 
-  faEllipsis, 
-  faEnvelope, 
-  faThumbtack 
+import {
+  faBars,
+  faEllipsis,
+  faEnvelope,
+  faThumbtack
 } from '@fortawesome/free-solid-svg-icons';
 import PageBreadcrumb from 'components/common/PageBreadcrumb';
 import LeadProfileCard from 'components/cards/crm/LeadProfileCard ';
@@ -17,78 +17,69 @@ import ScrollSpy from 'components/base/ScrollSpy';
 import apiHooks from '../../../hooks/apiHooks';
 import { defaultBreadcrumbItems } from 'data/commonData';
 import { useParams } from 'react-router-dom';
-
+import useLeadDetails from '../../../hooks/leadDetailHook'
 
 const LeadDetails = () => {
-  
-  const { leadId } = useParams<{ leadId: string }>();
-  const [openOffcanvas, setOpenOffcanvas] = useState(false);
-  
-  // Fetch all related data using hooks
-  const { data: leads } = apiHooks.useCRMLeads();
-  const { data: institutes } = apiHooks.useCRMInstitutes();
-  const { data: contacts } = apiHooks.useCrmContact();
-  // const { data: activities } = apiHooks.useFetchCrmActivitiesByTypeById('leads','1');
-  const { data: communications } = apiHooks.useCRMCommunications();
-  const { data: opportunities } = apiHooks.useCRMOpportunities();
+  const { id } = useParams<{ id: string }>();
+const leadId = id || '';  // Ensure a stable value is used
 
-  // Find current lead data
-  const currentLead = leads?.find(lead => lead.lead_id === leadId);
-  const leadInstitute = institutes?.find(inst => 
-    inst.crm_institute_id === currentLead?.crm_institute_id
-  );
-  const leadContacts = contacts?.filter(contact => 
-    contact.crm_institute_id === currentLead?.crm_institute_id
-  );
-  // const leadActivities = activities?.filter(activity => 
-  //   activity.related_to_id === leadId
-  // );
-  const leadCommunications = communications?.filter(comm => 
-    comm.related_to_id === leadId || comm.related_to_id === leadInstitute?.crm_institute_id
-  );
-  const leadOpportunities = opportunities?.filter(opp => 
-    opp.crm_institute_id === currentLead?.crm_institute_id
-  );
+  const [openOffcanvas, setOpenOffcanvas] = useState(false);
+
+  // Fetch lead details and related data using the new API
+  const {data,loading }= useLeadDetails(leadId || '') || [];
+
+  // Ensure leadData is not an array before destructuring
+  const lead = Array.isArray(data) && data.length > 0 ? data[0] : {};
+
+  const {
+    lead_id: currentLead,
+    institute: leadInstitute,
+    contacts: leadContacts,
+    activities: leadActivities,
+    communications: leadCommunications,
+    opportunities: leadOpportunities
+  } = lead;
+
 
   // Activity Timeline Component
-  // const ActivityTimeline = () => (
-  //   <div className="mb-4">
-  //     <h5 className="mb-3">Activity Timeline</h5>
-  //     {leadActivities?.map(activity => (
-  //       <div key={activity.activity_id} className="timeline-item">
-  //         <div className="d-flex align-items-center mb-2">
-  //           <span className="badge bg-primary me-2">
-  //             {activity.activity_type}
-  //           </span>
-  //           <small className="text-muted">
-  //             {new Date(activity.activity_date).toLocaleDateString()}
-  //           </small>
-  //         </div>
-  //         <p className="mb-0">{activity.description}</p>
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
+  const ActivityTimeline = () => (
+    <div className="mb-4">
+      <h5 className="mb-3">Activity Timeline</h5>
+      {leadActivities?.map((activity: { activity_id: Key | null | undefined; activity_type: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; activity_date: string | number | Date; description: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
+        <div key={activity.activity_id} className="timeline-item">
+          <div className="d-flex align-items-center mb-2">
+            <span className="badge bg-primary me-2">
+              {activity.activity_type}
+            </span>
+            <small className="text-muted">
+              {new Date(activity.activity_date).toLocaleDateString()}
+            </small>
+          </div>
+          <p className="mb-0">{activity.description}</p>
+        </div>
+      ))}
+    </div>
+  );
 
   // Opportunity Stages Component
   const OpportunityStages = () => (
     <div className="mb-4">
       <h5 className="mb-3">Opportunity Progress</h5>
-      {leadOpportunities?.map(opportunity => (
+      {leadOpportunities?.map((opportunity: { opportunity_id: Key | null | undefined; status: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; valid_from: string | number | Date; valid_to: string | number | Date; probability: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
         <div key={opportunity.opportunity_id} className="card mb-2">
           <div className="card-body">
             <div className="d-flex justify-content-between">
               <span>{opportunity.status}</span>
               <small>
-                {new Date(opportunity.valid_from).toLocaleDateString()} - 
-                {opportunity.valid_to === '9999-12-31' ? 'Present' : 
-                 new Date(opportunity.valid_to).toLocaleDateString()}
+                {new Date(opportunity.valid_from).toLocaleDateString()} -
+                {opportunity.valid_to === '9999-12-31' ? 'Present' :
+                  new Date(opportunity.valid_to).toLocaleDateString()}
               </small>
             </div>
             <div className="progress mt-2">
-              <div 
-                className="progress-bar" 
-                role="progressbar" 
+              <div
+                className="progress-bar"
+                role="progressbar"
                 style={{ width: `${opportunity.probability}%` }}
               >
                 {opportunity.probability}%
@@ -104,7 +95,7 @@ const LeadDetails = () => {
   const CommunicationHistory = () => (
     <div className="mb-4">
       <h5 className="mb-3">Communication History</h5>
-      {leadCommunications?.map(comm => (
+      {leadCommunications?.map((comm: { communication_id: Key | null | undefined; communication_type: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; created_at: string | number | Date; details: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
         <div key={comm.communication_id} className="card mb-2">
           <div className="card-body">
             <div className="d-flex justify-content-between">
@@ -120,6 +111,10 @@ const LeadDetails = () => {
     </div>
   );
 
+  // Loading and Error States
+  if (loading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div>
       <PageBreadcrumb items={defaultBreadcrumbItems} />
@@ -131,7 +126,46 @@ const LeadDetails = () => {
             </h2>
           </Col>
           <Col xs={12} md="auto">
-            {/* ... existing header buttons ... */}
+            <div className="d-flex gap-2">
+              <div className="flex-1 d-md-none">
+                <Button
+                  variant="phoenix-secondary"
+                  className="px-3 text-body-tertiary"
+                  onClick={() => setOpenOffcanvas(true)}
+                >
+                  <FontAwesomeIcon icon={faBars} />
+                </Button>
+              </div>
+              <Button
+                variant="primary"
+              // startIcon={
+              //   <FontAwesomeIcon icon={faEnvelope} className="me-2" />
+              // }
+              >
+                Send an email
+              </Button>
+              <Button variant="phoenix-secondary" className="px-3 px-sm-5">
+                <FontAwesomeIcon icon={faThumbtack} className="me-0 me-sm-2" />
+                <span className="d-none d-sm-inline">Shortlist</span>
+              </Button>
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="phoenix-secondary"
+                  className="dropdown-caret-none px-3"
+                >
+                  <FontAwesomeIcon icon={faEllipsis} />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#!">View Profile</Dropdown.Item>
+                  <Dropdown.Item href="#!">Report</Dropdown.Item>
+                  <Dropdown.Item href="#!">Manage notifications</Dropdown.Item>
+                  <Dropdown.Item href="#!" className="text-danger">
+                    Delete Lead
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           </Col>
         </Row>
 
@@ -139,21 +173,21 @@ const LeadDetails = () => {
           <Col md={5} xl={4} className="d-none d-md-block">
             <div className="sticky-leads-sidebar">
               <div className="lead-details-offcanvas bg-body scrollbar">
-                <LeadProfileCard 
-                  lead={currentLead} 
+                <LeadProfileCard
+                  lead={currentLead}
                   institute={leadInstitute}
                 />
-                <AboutLeadCard 
-                  lead={currentLead} 
+                <AboutLeadCard
+                  lead={currentLead}
                   contacts={leadContacts}
                 />
-                <LeadAddressCard 
-                  address={leadInstitute?.address} 
+                <LeadAddressCard
+                  address={leadInstitute?.address}
                 />
               </div>
             </div>
           </Col>
-          
+
           <Col md={7} xl={8}>
             <div className="lead-details-container">
               <ScrollSpy>
@@ -163,7 +197,7 @@ const LeadDetails = () => {
                   id="activities"
                   className="lead-details-scrollspy mb-8"
                 >
-                  {/* <ActivityTimeline /> */}
+                  <ActivityTimeline />
                 </ScrollSpy.Content>
 
                 <ScrollSpy.Content
@@ -191,11 +225,11 @@ const LeadDetails = () => {
           </Col>
         </Row>
       </div>
-      {/* <LeadDetailsOffcanvas 
-        open={openOffcanvas} 
+      <LeadDetailsOffcanvas
+        open={openOffcanvas}
         setOpen={setOpenOffcanvas}
-        // lead={currentLead}
-      /> */}
+      // lead={currentLead}
+      />
     </div>
   );
 };

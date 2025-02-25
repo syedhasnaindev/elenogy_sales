@@ -23,14 +23,15 @@ import * as taxService from './../services/taxService';
 import * as crmContactService from './../services/crmContactService';
 import * as discountService from './../services/discountService';
 
-const useFetchData = (fetchFunction: () => Promise<any[]>) => {
+const useFetchData = <T>(fetchFunction: (...args: any[]) => Promise<T[]>, ...args: any[]) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetchFunction();
+        const response = await fetchFunction(...args);
         setData(response);
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -40,19 +41,21 @@ const useFetchData = (fetchFunction: () => Promise<any[]>) => {
     };
 
     loadData();
-  }, [fetchFunction]);
+  }, [fetchFunction, ...args]);
 
   return { data, loading };
 };
 
-const createHook = (fetchFunction: () => Promise<any[]>) => () => useFetchData(fetchFunction);
+const createHook = (fetchFunction: (...args: any[]) => Promise<any[]>) =>
+  (...args: any[]) => useFetchData(fetchFunction, ...args);
 
 // Export hooks dynamically
 const apiHooks = {
   useUsers: createHook(userService.fetchUsers),
   useFetchCrmActivitiesByTypeById: (related_to_type: string, related_to_id: string) =>
     useFetchData(() => crmActivityService.fetchCrmActivitiesByTypeById(related_to_type, related_to_id)),
-
+  useLeadDetails: (leadId: string) =>
+    useFetchData(() => crmLeadsService.fetchCrmLeadsById(leadId)),
   useCrmContact: createHook(crmContactService.fetchCrmContact),
   useUserAuth: createHook(userAuthService.fetchUser),
   useCRMActivities: createHook(crmActivityService.fetchCrmActivities),
